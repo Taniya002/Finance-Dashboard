@@ -1,13 +1,10 @@
 # Finance Dashboard API
 
-A well-structured RESTful backend for a finance dashboard system with role-based access control, financial record management, and summary analytics.
-
-Built with **Node.js**, **Express**, and **MongoDB**.
+A RESTful backend for a finance dashboard system that handles financial records, user roles, and summary analytics. Built with Node.js, Express, and MongoDB.
 
 ---
 
-## Table of Contents
-
+## Features
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
@@ -23,16 +20,16 @@ Built with **Node.js**, **Express**, and **MongoDB**.
 
 ## Tech Stack
 
-| Layer        | Choice              | Reason                                      |
-|--------------|---------------------|---------------------------------------------|
-| Runtime      | Node.js             | Fast, non-blocking I/O for API workloads    |
-| Framework    | Express             | Minimal, composable, widely understood      |
-| Database     | MongoDB + Mongoose  | Flexible schema, great for aggregation      |
-| Auth         | JWT (jsonwebtoken)  | Stateless, simple to verify across services |
-| Validation   | express-validator   | Declarative, chainable, in-route validators |
-| Password     | bcryptjs            | Industry-standard hashing                   |
-| Rate Limiting| express-rate-limit  | Protects against brute-force attacks        |
-| Testing      | Jest + Supertest    | Full integration tests against real routes  |
+| Layer | Choice | Reason |
+|-------|--------|--------|
+| Runtime | Node.js | Fast, non-blocking I/O |
+| Framework | Express | Simple and flexible |
+| Database | MongoDB + Mongoose | Great for aggregation queries |
+| Auth | JWT | Stateless and easy to verify |
+| Validation | express-validator | Clean, in-route validation |
+| Password | bcryptjs | Industry-standard hashing |
+| Rate Limiting | express-rate-limit | Brute-force protection |
+| Testing | Jest + Supertest | Integration tests on real routes |
 
 ---
 
@@ -41,125 +38,84 @@ Built with **Node.js**, **Express**, and **MongoDB**.
 ```
 finance-dashboard/
 ├── src/
-│   ├── config/
-│   │   └── db.js                  # MongoDB connection
-│   ├── controllers/
-│   │   ├── authController.js      # Register, login, /me
-│   │   ├── userController.js      # User CRUD (admin only)
-│   │   ├── transactionController.js
-│   │   └── dashboardController.js # Analytics endpoints
-│   ├── middleware/
-│   │   ├── auth.js                # JWT authentication + role authorization
-│   │   ├── validate.js            # express-validator result handler
-│   │   └── errorHandler.js        # Centralised error handler
-│   ├── models/
-│   │   ├── User.js                # User schema with roles
-│   │   └── Transaction.js         # Transaction schema with soft delete
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   ├── userRoutes.js
-│   │   ├── transactionRoutes.js
-│   │   └── dashboardRoutes.js
-│   ├── services/
-│   │   ├── authService.js         # Registration & login logic
-│   │   ├── userService.js         # User management logic
-│   │   ├── transactionService.js  # CRUD + filtering + pagination
-│   │   └── dashboardService.js    # Aggregation queries
-│   ├── utils/
-│   │   ├── response.js            # Standardised API response helpers
-│   │   └── seed.js                # Demo data seeder
-│   ├── app.js                     # Express app setup
-│   └── server.js                  # Entry point
-├── tests/
-│   ├── setup.js                   # Test DB helpers
-│   ├── auth.test.js
-│   └── transactions.test.js
+│   ├── config/         # MongoDB connection
+│   ├── controllers/    # HTTP request/response handling
+│   ├── middleware/     # Auth, validation, error handler
+│   ├── models/         # User and Transaction schemas
+│   ├── routes/         # Route definitions with validators
+│   ├── services/       # Business logic layer
+│   └── utils/          # Response helpers and seed script
+├── tests/              # Integration tests
 ├── .env.example
 ├── package.json
 └── README.md
 ```
 
-**Why this structure?**  
-Controllers handle HTTP (parsing request, sending response). Services contain all business logic and are fully testable without HTTP. Models own schema + validation. This separation makes the codebase easy to extend and reason about.
+Controllers handle HTTP only. All business logic lives in services, keeping things clean and testable. Models own their own validation rules.
 
 ---
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js v18+
-- MongoDB running locally (or a MongoDB Atlas URI)
-
-### Installation
+**Prerequisites:** Node.js v18+ and MongoDB (local or Atlas)
 
 ```bash
-# 1. Clone the repo
 git clone <your-repo-url>
 cd finance-dashboard
-
-# 2. Install dependencies
 npm install
-
-# 3. Set up environment variables
 cp .env.example .env
-# Edit .env and set your MONGODB_URI and JWT_SECRET
-
-# 4. Start the server
-npm run dev        # development (nodemon)
-npm start          # production
+# Fill in MONGODB_URI and JWT_SECRET in .env
+npm run dev
 ```
 
-The server starts on `http://localhost:3000` by default.
+Server starts at `http://localhost:3000`
 
 ---
 
 ## Environment Variables
 
-| Variable        | Description                        | Default                                     |
-|-----------------|------------------------------------|---------------------------------------------|
-| `PORT`          | Port to run the server on          | `3000`                                      |
-| `MONGODB_URI`   | MongoDB connection string          | `mongodb://localhost:27017/finance_dashboard`|
-| `JWT_SECRET`    | Secret for signing JWT tokens      | *(required)*                                |
-| `JWT_EXPIRES_IN`| Token expiry duration              | `7d`                                        |
-| `NODE_ENV`      | Environment mode                   | `development`                               |
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `3000` |
+| `MONGODB_URI` | MongoDB connection string | `mongodb://localhost:27017/finance_dashboard` |
+| `JWT_SECRET` | JWT signing secret | required |
+| `JWT_EXPIRES_IN` | Token expiry | `7d` |
+| `NODE_ENV` | Environment | `development` |
 
 ---
 
-## Seeding Demo Data
+## Seed Demo Data
 
-Run the seed script to create three demo users and 60 sample transactions:
+Creates 3 users and 60 sample transactions:
 
 ```bash
 npm run seed
 ```
 
-Demo credentials:
-
-| Role     | Email               | Password      |
-|----------|---------------------|---------------|
-| Admin    | admin@demo.com      | password123   |
-| Analyst  | analyst@demo.com    | password123   |
-| Viewer   | viewer@demo.com     | password123   |
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@demo.com | password123 |
+| Analyst | analyst@demo.com | password123 |
+| Viewer | viewer@demo.com | password123 |
 
 ---
 
 ## API Reference
 
-All routes return JSON in the shape:
+All responses follow this shape:
 ```json
 { "success": true, "message": "...", "data": { ... } }
 ```
 
-### Authentication
+### Auth
 
-| Method | Endpoint            | Access  | Description             |
-|--------|---------------------|---------|-------------------------|
-| POST   | /api/auth/register  | Public  | Register a new user     |
-| POST   | /api/auth/login     | Public  | Login, receive JWT      |
-| GET    | /api/auth/me        | Any     | Get current user info   |
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| POST | /api/auth/register | Public | Register a new user |
+| POST | /api/auth/login | Public | Login and get JWT token |
+| GET | /api/auth/me | Any | Get current user info |
 
-**Register request body:**
+**Register body:**
 ```json
 {
   "name": "Alice Admin",
@@ -169,205 +125,147 @@ All routes return JSON in the shape:
 }
 ```
 
-**Login request body:**
-```json
-{
-  "email": "alice@example.com",
-  "password": "password123"
-}
-```
-
-**Login response:**
-```json
-{
-  "success": true,
-  "message": "Login successful.",
-  "data": {
-    "token": "eyJhbGci...",
-    "user": { "_id": "...", "name": "Alice Admin", "email": "...", "role": "admin" }
-  }
-}
-```
-
-All subsequent requests use the token as: `Authorization: Bearer <token>`
+Use token in all requests: `Authorization: Bearer <token>`
 
 ---
 
 ### Users (Admin only)
 
-| Method | Endpoint         | Description              |
-|--------|------------------|--------------------------|
-| GET    | /api/users       | List all users           |
-| GET    | /api/users/:id   | Get a single user        |
-| PATCH  | /api/users/:id   | Update role/status/name  |
-| DELETE | /api/users/:id   | Delete a user            |
-
-**PATCH /api/users/:id body (all fields optional):**
-```json
-{
-  "role": "analyst",
-  "isActive": false,
-  "name": "Updated Name"
-}
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/users | List all users |
+| GET | /api/users/:id | Get a single user |
+| PATCH | /api/users/:id | Update role, status, or name |
+| DELETE | /api/users/:id | Delete a user |
 
 ---
 
 ### Transactions
 
-| Method | Endpoint                | Access              | Description                    |
-|--------|-------------------------|---------------------|--------------------------------|
-| GET    | /api/transactions       | All roles           | List transactions (paginated)  |
-| GET    | /api/transactions/:id   | All roles           | Get single transaction         |
-| POST   | /api/transactions       | Admin, Analyst      | Create transaction             |
-| PATCH  | /api/transactions/:id   | Admin, Analyst      | Update transaction             |
-| DELETE | /api/transactions/:id   | Admin only          | Soft-delete transaction        |
+| Method | Endpoint | Who can access |
+|--------|----------|----------------|
+| GET | /api/transactions | Viewer, Analyst, Admin |
+| GET | /api/transactions/:id | Viewer, Analyst, Admin |
+| POST | /api/transactions | Analyst, Admin |
+| PATCH | /api/transactions/:id | Analyst, Admin |
+| DELETE | /api/transactions/:id | Admin only |
 
-**POST /api/transactions body:**
+**Create transaction body:**
 ```json
 {
-  "amount": 2500.00,
+  "amount": 2500,
   "type": "income",
   "category": "salary",
   "date": "2024-03-15",
-  "notes": "March salary payment"
+  "notes": "March salary"
 }
 ```
-
-**GET /api/transactions query parameters:**
-
-| Param      | Type   | Description                              |
-|------------|--------|------------------------------------------|
-| type       | string | Filter by `income` or `expense`          |
-| category   | string | Filter by category name                  |
-| startDate  | ISO date | Filter from this date                  |
-| endDate    | ISO date | Filter to this date                    |
-| page       | number | Page number (default: 1)                 |
-| limit      | number | Results per page (default: 20, max: 100) |
-| sort       | string | Sort field (default: `-date`)            |
 
 **Supported types:** `income`, `expense`
 
 **Supported categories:** `salary`, `freelance`, `investment`, `food`, `transport`, `utilities`, `entertainment`, `healthcare`, `education`, `rent`, `other`
 
+**Filter options (query params):**
+
+| Param | Description |
+|-------|-------------|
+| type | income or expense |
+| category | any supported category |
+| startDate | filter from date (ISO 8601) |
+| endDate | filter to date (ISO 8601) |
+| page | page number (default: 1) |
+| limit | results per page (default: 20, max: 100) |
+
 ---
 
-### Dashboard (Admin, Analyst only)
+### Dashboard (Analyst, Admin only)
 
-| Method | Endpoint                      | Description                          |
-|--------|-------------------------------|--------------------------------------|
-| GET    | /api/dashboard/summary        | Total income, expenses, net balance  |
-| GET    | /api/dashboard/categories     | Breakdown of totals by category      |
-| GET    | /api/dashboard/recent         | Most recent transactions             |
-| GET    | /api/dashboard/trends/monthly | Monthly income vs expense for a year |
-| GET    | /api/dashboard/trends/weekly  | Weekly breakdown for a given month   |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/dashboard/summary | Total income, expenses, net balance |
+| GET | /api/dashboard/categories | Totals grouped by category |
+| GET | /api/dashboard/recent | Most recent transactions |
+| GET | /api/dashboard/trends/monthly | Monthly trends for a year |
+| GET | /api/dashboard/trends/weekly | Weekly trends for a month |
 
-**GET /api/dashboard/summary** (optional `?startDate=&endDate=`):
+**Summary response:**
 ```json
 {
-  "data": {
-    "totalIncome": 15000,
-    "totalExpenses": 8200,
-    "netBalance": 6800,
-    "totalTransactions": 34
-  }
-}
-```
-
-**GET /api/dashboard/trends/monthly?year=2024:**
-```json
-{
-  "data": {
-    "trends": [
-      { "month": 1, "data": [{ "type": "income", "total": 5000, "count": 3 }, ...] },
-      ...
-    ]
-  }
+  "totalIncome": 15000,
+  "totalExpenses": 8200,
+  "netBalance": 6800,
+  "totalTransactions": 34
 }
 ```
 
 ---
 
-## Role & Access Control
+## Role and Access Control
 
-| Action                     | Viewer | Analyst | Admin |
-|----------------------------|:------:|:-------:|:-----:|
-| Login / Register           | ✅     | ✅      | ✅    |
-| View transactions          | ✅     | ✅      | ✅    |
-| Create transactions        | ❌     | ✅      | ✅    |
-| Update transactions        | ❌     | ✅      | ✅    |
-| Delete transactions        | ❌     | ❌      | ✅    |
-| View dashboard analytics   | ❌     | ✅      | ✅    |
-| Manage users               | ❌     | ❌      | ✅    |
+| Action | Viewer | Analyst | Admin |
+|--------|--------|---------|-------|
+| Login / Register | Allowed | Allowed | Allowed |
+| View transactions | Allowed | Allowed | Allowed |
+| Create transactions | Not allowed | Allowed | Allowed |
+| Update transactions | Not allowed | Allowed | Allowed |
+| Delete transactions | Not allowed | Not allowed | Allowed |
+| View dashboard analytics | Not allowed | Allowed | Allowed |
+| Manage users | Not allowed | Not allowed | Allowed |
 
-Access control is enforced using two middleware functions:
-- `authenticate` — verifies the JWT and attaches the user to `req.user`
-- `authorize(...roles)` — checks `req.user.role` is in the allowed list
+Access control uses two middleware functions — `authenticate` checks the JWT token, and `authorize(...roles)` checks if the user's role is permitted for that route.
 
 ---
 
 ## Data Models
 
 ### User
-| Field     | Type    | Notes                              |
-|-----------|---------|------------------------------------|
-| name      | String  | Required, 2–100 chars              |
-| email     | String  | Required, unique, lowercase        |
-| password  | String  | Hashed with bcrypt, never returned |
-| role      | String  | `viewer` / `analyst` / `admin`     |
-| isActive  | Boolean | Deactivated users cannot log in    |
-| createdAt | Date    | Auto-managed                       |
+| Field | Type | Notes |
+|-------|------|-------|
+| name | String | Required, 2-100 chars |
+| email | String | Required, unique |
+| password | String | Hashed with bcrypt, never returned in responses |
+| role | String | viewer / analyst / admin |
+| isActive | Boolean | Inactive users cannot log in |
 
 ### Transaction
-| Field     | Type     | Notes                                    |
-|-----------|----------|------------------------------------------|
-| amount    | Number   | Must be > 0                              |
-| type      | String   | `income` or `expense`                    |
-| category  | String   | Enum of 11 categories                    |
-| date      | Date     | Defaults to now                          |
-| notes     | String   | Optional, max 500 chars                  |
-| createdBy | ObjectId | Reference to User                        |
-| isDeleted | Boolean  | Soft delete flag (default: false)        |
-| deletedAt | Date     | Set on soft delete                       |
+| Field | Type | Notes |
+|-------|------|-------|
+| amount | Number | Must be greater than 0 |
+| type | String | income or expense |
+| category | String | One of 11 supported categories |
+| date | Date | Defaults to current date |
+| notes | String | Optional, max 500 chars |
+| createdBy | ObjectId | References the User who created it |
+| isDeleted | Boolean | Soft delete flag |
+| deletedAt | Date | Set when soft deleted |
 
 ---
 
-## Design Decisions & Assumptions
+## Design Decisions
 
-**Soft delete** — Transactions are never hard-deleted. The `isDeleted` flag is set to `true` and they are excluded from all normal queries via a Mongoose pre-query hook. This preserves data integrity for auditing.
+**Soft delete on transactions** — Financial records should never be permanently deleted. Setting `isDeleted: true` keeps the data for auditing while hiding it from normal queries. A Mongoose pre-query hook handles this automatically.
 
-**Viewer cannot access dashboard** — A viewer role is meant for raw record visibility only. Analytics are considered a privileged operation for analysts and admins. This is a reasonable assumption for a finance system where summary data may be sensitive.
+**Viewer cannot access dashboard** — The viewer role is meant for looking at raw records only. Analytics and summaries are treated as privileged data, so only analysts and admins can access them.
 
-**Role assigned at registration** — In production, you would likely restrict role assignment to admins. For this assessment, any role can be specified on registration to make testing easier. This is documented as an intentional trade-off.
+**Role at registration** — In a real production system, role assignment would be restricted to admins. For this project, roles can be set at registration to make testing easier. This is an intentional tradeoff.
 
-**Password never returned** — The `password` field has `select: false` in Mongoose, so it is never included in any response payload unless explicitly requested (only done internally in the login service).
+**Password never exposed** — The password field uses `select: false` in Mongoose so it never appears in any API response.
 
-**Pagination on transactions** — Defaults to 20 per page, capped at 100. This prevents performance issues on large datasets.
+**Pagination defaults** — Transactions default to 20 per page with a max of 100. This keeps responses fast even with large datasets.
 
-**MongoDB indexes** — Indexes are defined on `type`, `category`, `date`, and `createdBy` on the Transaction model to support efficient filtering and aggregation queries.
+**MongoDB indexes** — Indexes on `type`, `category`, `date`, and `createdBy` make filtering and aggregation queries efficient.
 
-**Rate limiting** — 100 requests per 15-minute window per IP. Applied globally to all `/api/*` routes.
-
-**JWT expiry** — Tokens expire in 7 days by default. No refresh token mechanism is implemented (out of scope for this assessment).
+**Rate limiting** — 100 requests per 15 minutes per IP across all `/api/*` routes.
 
 ---
 
 ## Running Tests
 
-Tests use Jest + Supertest against a real local MongoDB test database.
-
 ```bash
-# Make sure MongoDB is running
 npm test
 
-# With coverage report
+# With coverage
 npm run test:coverage
 ```
 
-Tests cover:
-- User registration and login flows
-- Token validation and authentication errors
-- Role-based access enforcement (viewer/analyst/admin)
-- Transaction CRUD including filtering and pagination
-- Soft delete verification (deleted records excluded from listing)
-- Input validation and error responses
+Tests cover registration and login, token validation, role-based access for all three roles, transaction CRUD, soft delete behaviour, filtering, pagination, and input validation errors.
