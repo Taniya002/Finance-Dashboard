@@ -9,11 +9,11 @@ A RESTful backend for a finance dashboard system that handles financial records,
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
-- [Seeding Demo Data](#seeding-demo-data)
+- [Seed Demo Data](#seeding-demo-data)
 - [API Reference](#api-reference)
 - [Role & Access Control](#role--access-control)
 - [Data Models](#data-models)
-- [Design Decisions & Assumptions](#design-decisions--assumptions)
+- [Design Decisions](#design-decisions--assumptions)
 - [Running Tests](#running-tests)
 
 ---
