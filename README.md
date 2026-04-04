@@ -11,7 +11,7 @@ A RESTful backend for a finance dashboard system that handles financial records,
 - [Environment Variables](#environment-variables)
 - [Seed Demo Data](#seed-demo-data)
 - [API Reference](#api-reference)
-- [Role & Access Control](#role-access-control)
+- [Role and Access Control](#role-and-access-control)
 - [Data Models](#data-models)
 - [Design Decisions](#design-decisions)
 - [Running Tests](#running-tests)
